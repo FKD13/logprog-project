@@ -221,6 +221,10 @@ Elke lijn van de notatie behalve de laatste is als volgt gestructureerd:
     is rij 8:
     - De aanduiding van de huidige speler (☚)
 
+De laatse lijn is `" abcdefgh"` (2 spaties gevolgd door abcdefg) optioneel
+gevolgd door een newline.
+
+
 | Naam                      | Symbool | Code punt | Prolog String |
 | ------------------------- | ------- | --------- | ------------- |
 | witte koning              | ♔       | U+2654    | `"\u2654"`    |
