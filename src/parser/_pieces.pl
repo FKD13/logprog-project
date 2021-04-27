@@ -1,4 +1,8 @@
-parse_optional_piece(X) --> parse_empty(X) | parse_piece(X).
+:- module('_pieces', [parse_optional_piece/3]).
+
+parse_optional_piece(X) --> 
+    parse_empty(X) | 
+    parse_piece(X).
 
 parse_empty(empty) --> " ".
 

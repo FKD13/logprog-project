@@ -1,6 +1,7 @@
 :- module(chess_parser, [parse_board/5]).
-:- ['_pieces'].
-:- ['_digits'].
+:- use_module('_pieces').
+:- use_module('_digits').
+
 
 parse_board(b(R1, R2, R3, R4, R5, R6, R7, R8), MetaWhite, MetaBlack) --> 
     parse_column(8, R8), parse_metadata(MetaBlack), parse_newline,

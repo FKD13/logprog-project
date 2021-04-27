@@ -1,5 +1,5 @@
-:- initialization main.
-:- use_module('board_parsing/chess_parser').
+%:- initialization main.
+:- use_module('parser/chess_parser').
 
 
 main:-
