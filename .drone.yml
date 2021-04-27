@@ -1,0 +1,9 @@
+kind: pipeline
+type: docker
+name: UnitTest
+steps:
+  - name: Run UnitTests
+    image: swipl:latest
+    commands:
+    - apt install -y make
+    - make test
