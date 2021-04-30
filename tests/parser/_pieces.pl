@@ -10,10 +10,10 @@ test(parse_empty_should_fail, fail) :-
     X \== 32,
     '_pieces':parse_empty(_, [X], []).
 
-test(parse_optional_piece, [setup(numlist(9812, 9823, List)), all(X == List)]) :-
+test(parse_optional_piece, [setup(numlist(9812, 9823, List)), set(X == List)]) :-
     parse_optional_piece(p(_,_), [X], []).
 
-test(parse_optional_piece_empty, [setup(string_codes(" ", Codes)), all(Piece == [empty])]) :-
+test(parse_optional_piece_empty, [setup(string_codes(" ", Codes)), set(Piece == [empty])]) :-
     parse_optional_piece(Piece, Codes, []).
 
 :- end_tests('parser/_pieces').

@@ -38,8 +38,8 @@ parse_eigth_pieces(r(P1, P2, P3, P4, P5, P6, P7, P8)) -->
 
 parse_metadata(m(Queen, King, Turn)) --> 
     " [", 
-    parse_optional_rocade(w, queen, Queen),
-    parse_optional_rocade(w, king, King),
+    parse_optional_rocade(_, queen, Queen),
+    parse_optional_rocade(_, king, King),
     "]", !,
     parse_optional_turn_indicator(Turn). 
 

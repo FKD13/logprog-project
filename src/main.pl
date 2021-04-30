@@ -1,6 +1,6 @@
 :- module(main, [main/0]).
 
-:- initialization main.
+%:- initialization main.
 :- use_module('parser/chess_parser').
 
 :- doc_server(5000).
