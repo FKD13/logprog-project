@@ -1,4 +1,4 @@
-:- begin_tests(digits).
+:- begin_tests('parser/_digits').
 :- use_module('../../src/parser/_digits').
 
 test(parse_digit_1, [setup(string_codes("1", Codes)), true(X =:= 1)]) :-
@@ -39,4 +39,4 @@ test(parse_digit_should_fail, [fail]) :-
     generate_failing_codes(X),
     parse_digit(_, [X], []).
 
-:- end_tests(digits).
+:- end_tests('parser/_digits').

@@ -1,4 +1,4 @@
-:- begin_tests(pieces).
+:- begin_tests('parser/_pieces').
 :- use_module('../../src/parser/_pieces').
 
 test(parse_empty, [setup(string_codes(" ", Codes))]) :-
@@ -16,4 +16,4 @@ test(parse_optional_piece, [setup(numlist(9812, 9823, List)), all(X == List)]) :
 test(parse_optional_piece_empty, [setup(string_codes(" ", Codes)), all(Piece == [empty])]) :-
     parse_optional_piece(Piece, Codes, []).
 
-:- end_tests(pieces).
+:- end_tests('parser/_pieces').
