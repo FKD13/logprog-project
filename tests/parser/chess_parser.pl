@@ -62,6 +62,14 @@ test(parse_metadata) :-
     '_parse_metadata'(m(no , no , yes), " [  ]☚"),
     '_parse_metadata'(m(yes, no , yes), " [♛ ]☚"),
     '_parse_metadata'(m(no , yes, yes), " [ ♚]☚"),
-    '_parse_metadata'(m(yes, yes, yes), " [♛♚]☚").
+    '_parse_metadata'(m(yes, yes, yes), " [♛♚]☚"),
+    '_parse_metadata'(m(no , no , no ), " [  ]"),
+    '_parse_metadata'(m(yes, no , no ), " [♕ ]"),
+    '_parse_metadata'(m(no , yes, no ), " [ ♔]"),
+    '_parse_metadata'(m(yes, yes, no ), " [♕♔]"),
+    '_parse_metadata'(m(no , no , yes), " [  ]☚"),
+    '_parse_metadata'(m(yes, no , yes), " [♕ ]☚"),
+    '_parse_metadata'(m(no , yes, yes), " [ ♔]☚"),
+    '_parse_metadata'(m(yes, yes, yes), " [♕♔]☚").
 
 :- end_tests('parser/chess_parser').
