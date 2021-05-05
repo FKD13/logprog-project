@@ -73,8 +73,8 @@ test(parse_metadata) :-
     '_parse_metadata'(m(yes, yes, yes), " [♕♔]☚").
 
 test(parse_board, [set(
-    B = [
-        b(
+    [B, M1, M2] = [
+        [b(
             r(p(w,rook), p(w,knight), p(w,bishop), p(w,queen), p(w,king), p(w,bishop), p(w,knight), p(w,rook)),
             r(p(w,pawn), p(w,pawn), p(w,pawn), p(w,pawn), p(w,pawn), p(w,pawn), p(w,pawn), p(w,pawn)),
             r(empty,empty,empty,empty,empty,empty,empty,empty),
@@ -83,10 +83,9 @@ test(parse_board, [set(
             r(empty,empty,empty,empty,empty,empty,empty,empty),
             r(p(b,pawn), p(b,pawn), p(b,pawn), p(b,pawn), p(b,pawn), p(b,pawn), p(b,pawn), p(b,pawn)),
             r(p(b,rook), p(b,knight), p(b,bishop), p(b,queen), p(b,king), p(b,bishop), p(b,knight), p(b,rook))
-        )
-    ]), 
-    set(M1 = [m(yes, yes, yes)]), 
-    set(M2 = [m(yes, yes, no)])]) :-
+        ), 
+        m(yes, yes, yes),
+        m(yes, yes, no)]])]) :-
     string_codes("8 ♜♞♝♛♚♝♞♜ [♛♚]\n7 ♟♟♟♟♟♟♟♟\n6         \n5         \n4         \n3         \n2 ♙♙♙♙♙♙♙♙\n1 ♖♘♗♕♔♗♘♖ [♕♔]☚\n  abcdefgh", Codes),    
     parse_board(B, M1, M2, Codes, []).
 
