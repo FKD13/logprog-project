@@ -27,14 +27,14 @@ parse_column(N, Row) --> parse_digit(N), " ", parse_eigth_pieces(Row).
 
 % Parse 8 pieces
 parse_eigth_pieces(r(P1, P2, P3, P4, P5, P6, P7, P8)) --> 
-    parse_optional_piece(P1), !,
-    parse_optional_piece(P2), !,
-    parse_optional_piece(P3), !,
-    parse_optional_piece(P4), !, 
-    parse_optional_piece(P5), !, 
-    parse_optional_piece(P6), !, 
-    parse_optional_piece(P7), !, 
-    parse_optional_piece(P8), !.
+    parse_optional_piece(P1),
+    parse_optional_piece(P2),
+    parse_optional_piece(P3),
+    parse_optional_piece(P4), 
+    parse_optional_piece(P5), 
+    parse_optional_piece(P6), 
+    parse_optional_piece(P7), 
+    parse_optional_piece(P8).
 
 parse_metadata(m(Queen, King, Turn)) --> 
     " [", 
@@ -49,7 +49,7 @@ parse_optional_rocade(Color, Piece, yes) --> parse_optional_piece(p(Color, Piece
 parse_optional_turn_indicator(yes) --> "\u261A", !.
 parse_optional_turn_indicator(no) --> [].
 
-parse_last_line --> "  abcdefg", parse_optional_newline.
+parse_last_line --> "  abcdefgh", parse_optional_newline.
 
 parse_newline --> "\n".
 
