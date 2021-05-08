@@ -2,6 +2,7 @@
 
 %:- initialization main.
 :- use_module('parser/chess_parser').
+:- use_module('utils/board_utils').
 
 :- doc_server(5000).
 

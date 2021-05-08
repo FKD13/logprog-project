@@ -1,5 +1,6 @@
 :- begin_tests('parser/chess_parser').
 :- use_module('../../src/parser/chess_parser').
+:- use_module('../test_utils').
 
 
 test(parse_optional_newline, [setup(string_codes("\n", Codes)), set(X = [Codes, []])]) :-
@@ -72,20 +73,7 @@ test(parse_metadata) :-
     '_parse_metadata'(m(no , yes, yes), " [ ♔]☚"),
     '_parse_metadata'(m(yes, yes, yes), " [♕♔]☚").
 
-test(parse_board, [set(
-    [B, M1, M2] = [
-        [b(
-            r(p(w,rook), p(w,knight), p(w,bishop), p(w,queen), p(w,king), p(w,bishop), p(w,knight), p(w,rook)),
-            r(p(w,pawn), p(w,pawn), p(w,pawn), p(w,pawn), p(w,pawn), p(w,pawn), p(w,pawn), p(w,pawn)),
-            r(empty,empty,empty,empty,empty,empty,empty,empty),
-            r(empty,empty,empty,empty,empty,empty,empty,empty),
-            r(empty,empty,empty,empty,empty,empty,empty,empty),
-            r(empty,empty,empty,empty,empty,empty,empty,empty),
-            r(p(b,pawn), p(b,pawn), p(b,pawn), p(b,pawn), p(b,pawn), p(b,pawn), p(b,pawn), p(b,pawn)),
-            r(p(b,rook), p(b,knight), p(b,bishop), p(b,queen), p(b,king), p(b,bishop), p(b,knight), p(b,rook))
-        ), 
-        m(yes, yes, yes),
-        m(yes, yes, no)]])]) :-
+test(parse_board, [setup(start_board(SB)), set([B, M1, M2] = [[SB, m(yes, yes, yes), m(yes, yes, no)]])]) :-
     string_codes("8 ♜♞♝♛♚♝♞♜ [♛♚]\n7 ♟♟♟♟♟♟♟♟\n6         \n5         \n4         \n3         \n2 ♙♙♙♙♙♙♙♙\n1 ♖♘♗♕♔♗♘♖ [♕♔]☚\n  abcdefgh", Codes),    
     parse_board(B, M1, M2, Codes, []).
 
