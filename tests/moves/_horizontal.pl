@@ -11,16 +11,16 @@ test(get_horizontal_moves, [setup(start_board(SB)), true(X = [4/6,4/5,4/4,4/3,4/
 test(get_horizontal_moves, [setup(start_board(SB)), true(X = [7/2,7/4])]) :-
     get_horizontal_moves(SB, 7/3, X-[]).
 
-test(get_horizontal_moves, [setup(start_board(SB)), true(X = [1/2])]) :-
+test(get_horizontal_moves_corners, [setup(start_board(SB)), true(X = [1/2])]) :-
     get_horizontal_moves(SB, 1/1, X-[]).
 
-test(get_horizontal_moves, [setup(start_board(SB)), true(X = [1/7])]) :-
+test(get_horizontal_moves_corners, [setup(start_board(SB)), true(X = [1/7])]) :-
     get_horizontal_moves(SB, 1/8, X-[]).
 
-test(get_horizontal_moves, [setup(start_board(SB)), true(X = [8/7])]) :-
+test(get_horizontal_moves_corners, [setup(start_board(SB)), true(X = [8/7])]) :-
     get_horizontal_moves(SB, 8/8, X-[]).
 
-test(get_horizontal_moves, [setup(start_board(SB)), true(X = [8/2])]) :-
+test(get_horizontal_moves_corners, [setup(start_board(SB)), true(X = [8/2])]) :-
     get_horizontal_moves(SB, 8/1, X-[]).
 
 :- end_tests('moves/_horizontal').
