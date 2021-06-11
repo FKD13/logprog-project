@@ -2,6 +2,7 @@
 
 :- ['moves/_diagonal'].
 :- ['moves/_horizontal'].
+:- ['moves/_surroundings'].
 :- ['moves/_vertical'].
 
 :- ['parser/_digits'].
