@@ -9,8 +9,6 @@
 /** <module> Main module
 
 The main module defines rules used to start the chess program.
-
-@author Francis Klinck
 */
 
 

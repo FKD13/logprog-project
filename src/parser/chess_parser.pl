@@ -3,9 +3,6 @@
 :- use_module('_digits').
 
 /** <module> Chess board parsing
-
-
-@author Francis Klinck
 */
 
 

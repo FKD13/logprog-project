@@ -17,6 +17,4 @@ Start by running:
 ==
 $ make docs
 ==
-
-@author Francis Klinck
 */
