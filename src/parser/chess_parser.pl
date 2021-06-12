@@ -1,6 +1,8 @@
 :- module(chess_parser, [parse_board/5]).
-:- use_module('_pieces').
+
+:- use_module('_columns').
 :- use_module('_digits').
+:- use_module('_pieces').
 
 /** <module> Chess board parsing
 */
@@ -33,15 +35,19 @@ parse_eigth_pieces(r(P1, P2, P3, P4, P5, P6, P7, P8)) -->
     parse_optional_piece(P7), 
     parse_optional_piece(P8).
 
-parse_metadata(m(Queen, King, Turn)) --> 
+parse_metadata(m(Queen, King, Turn, Coord)) --> 
     " [", 
     parse_optional_rocade(_, queen, Queen),
     parse_optional_rocade(_, king, King),
+    parse_optional_en_passant(Coord),
     "]", !,
     parse_optional_turn_indicator(Turn). 
 
 parse_optional_rocade(_, _, no)          --> parse_optional_piece(empty).
 parse_optional_rocade(Color, Piece, yes) --> parse_optional_piece(p(Color, Piece)), {member(Piece, [queen, king])}.
+
+parse_optional_en_passant(no) --> "".
+parse_optional_en_passant(R/C) --> parse_column_id(C), parse_digit(R).
 
 parse_optional_turn_indicator(yes) --> "\u261A", !.
 parse_optional_turn_indicator(no) --> [].

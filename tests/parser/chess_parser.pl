@@ -28,6 +28,30 @@ test(parse_optional_rocade_fails, fail) :-
     \+ member(X, Codes),
     chess_parser:parse_optional_rocade(_, _, _, [X], []).
 
+test(parse_optional_en_passant, [setup(string_codes("e2", Codes)), set(Coord = [2/5])]) :-
+    chess_parser:parse_optional_en_passant(Coord, Codes, []).
+
+test(parse_optional_en_passant, [setup(string_codes("e2", Codes)), set(Coord = [no])]) :-
+    chess_parser:parse_optional_en_passant(Coord, Codes, Codes).
+
+valid_en_passant_generator(C, R) :-
+    string_codes("12345678", Rows),
+    string_codes("abcdefgh", Cols),
+    member(C, Cols),
+    member(R, Rows).
+
+test(parse_optional_en_passant, [forall(valid_en_passant_generator(C, R)), set(Coord = [_/_])]) :-
+    chess_parser:parse_optional_en_passant(Coord, [C, R], []).
+
+invalid_en_passant_generator(C, R) :-
+    string_codes("09", Rows),
+    string_codes("ijklmnopqrstuvwxyz", Cols),
+    member(C, Cols),
+    member(R, Rows).
+
+test(parse_optional_en_passant_fails, [forall(invalid_en_passant_generator(C, R)), fail]) :-
+    chess_parser:parse_optional_en_passant(_/_, [C, R], []).
+
 test(parse_last_line, [set(X = [[], [10]])]) :-
     string_codes("  abcdefgh\n", Codes),
     chess_parser:parse_last_line(Codes, X).
@@ -54,26 +78,41 @@ test(parse_optional_turn_indicator_fail, fail) :-
     string_codes(Str, Codes),
     chess_parser:parse_metadata(Meta, Codes, []).
 
-
 test(parse_metadata) :-
-    '_parse_metadata'(m(no , no , no ), " [  ]"),
-    '_parse_metadata'(m(yes, no , no ), " [♛ ]"),
-    '_parse_metadata'(m(no , yes, no ), " [ ♚]"),
-    '_parse_metadata'(m(yes, yes, no ), " [♛♚]"),
-    '_parse_metadata'(m(no , no , yes), " [  ]☚"),
-    '_parse_metadata'(m(yes, no , yes), " [♛ ]☚"),
-    '_parse_metadata'(m(no , yes, yes), " [ ♚]☚"),
-    '_parse_metadata'(m(yes, yes, yes), " [♛♚]☚"),
-    '_parse_metadata'(m(no , no , no ), " [  ]"),
-    '_parse_metadata'(m(yes, no , no ), " [♕ ]"),
-    '_parse_metadata'(m(no , yes, no ), " [ ♔]"),
-    '_parse_metadata'(m(yes, yes, no ), " [♕♔]"),
-    '_parse_metadata'(m(no , no , yes), " [  ]☚"),
-    '_parse_metadata'(m(yes, no , yes), " [♕ ]☚"),
-    '_parse_metadata'(m(no , yes, yes), " [ ♔]☚"),
-    '_parse_metadata'(m(yes, yes, yes), " [♕♔]☚").
+    '_parse_metadata'(m(no , no , no , no), " [  ]"),
+    '_parse_metadata'(m(yes, no , no , no), " [♛ ]"),
+    '_parse_metadata'(m(no , yes, no , no), " [ ♚]"),
+    '_parse_metadata'(m(yes, yes, no , no), " [♛♚]"),
+    '_parse_metadata'(m(no , no , yes, no), " [  ]☚"),
+    '_parse_metadata'(m(yes, no , yes, no), " [♛ ]☚"),
+    '_parse_metadata'(m(no , yes, yes, no), " [ ♚]☚"),
+    '_parse_metadata'(m(yes, yes, yes, no), " [♛♚]☚"),
+    '_parse_metadata'(m(no , no , no , no), " [  ]"),
+    '_parse_metadata'(m(yes, no , no , no), " [♕ ]"),
+    '_parse_metadata'(m(no , yes, no , no), " [ ♔]"),
+    '_parse_metadata'(m(yes, yes, no , no), " [♕♔]"),
+    '_parse_metadata'(m(no , no , yes, no), " [  ]☚"),
+    '_parse_metadata'(m(yes, no , yes, no), " [♕ ]☚"),
+    '_parse_metadata'(m(no , yes, yes, no), " [ ♔]☚"),
+    '_parse_metadata'(m(yes, yes, yes, no), " [♕♔]☚"),
+    '_parse_metadata'(m(no , no , no , 2/5), " [  e2]"),
+    '_parse_metadata'(m(yes, no , no , 2/5), " [♛ e2]"),
+    '_parse_metadata'(m(no , yes, no , 2/5), " [ ♚e2]"),
+    '_parse_metadata'(m(yes, yes, no , 2/5), " [♛♚e2]"),
+    '_parse_metadata'(m(no , no , yes, 2/5), " [  e2]☚"),
+    '_parse_metadata'(m(yes, no , yes, 2/5), " [♛ e2]☚"),
+    '_parse_metadata'(m(no , yes, yes, 2/5), " [ ♚e2]☚"),
+    '_parse_metadata'(m(yes, yes, yes, 2/5), " [♛♚e2]☚"),
+    '_parse_metadata'(m(no , no , no , 2/5), " [  e2]"),
+    '_parse_metadata'(m(yes, no , no , 2/5), " [♕ e2]"),
+    '_parse_metadata'(m(no , yes, no , 2/5), " [ ♔e2]"),
+    '_parse_metadata'(m(yes, yes, no , 2/5), " [♕♔e2]"),
+    '_parse_metadata'(m(no , no , yes, 2/5), " [  e2]☚"),
+    '_parse_metadata'(m(yes, no , yes, 2/5), " [♕ e2]☚"),
+    '_parse_metadata'(m(no , yes, yes, 2/5), " [ ♔e2]☚"),
+    '_parse_metadata'(m(yes, yes, yes, 2/5), " [♕♔e2]☚").
 
-test(parse_board, [setup(start_board(SB)), set([B, M1, M2] = [[SB, m(yes, yes, yes), m(yes, yes, no)]])]) :-
+test(parse_board, [setup(start_board(SB)), set([B, M1, M2] = [[SB, m(yes, yes, yes, no), m(yes, yes, no, no)]])]) :-
     string_codes("8 ♜♞♝♛♚♝♞♜ [♛♚]\n7 ♟♟♟♟♟♟♟♟\n6         \n5         \n4         \n3         \n2 ♙♙♙♙♙♙♙♙\n1 ♖♘♗♕♔♗♘♖ [♕♔]☚\n  abcdefgh", Codes),    
     parse_board(B, M1, M2, Codes, []).
 
