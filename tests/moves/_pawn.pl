@@ -4,14 +4,14 @@
 :- use_module('../test_utils').
 
 test(valid_position, [forall(empty_generator(Coord)), setup(start_board(SB)), true(X = [Coord])]) :-
-    '_pawn':valid_poition(SB, Coord, X-[], yes).
+    '_pawn':valid_position(SB, Coord, X-[], yes).
 
 invalid_position_generator(Coord) :- white_generator(Coord).
 invalid_position_generator(Coord) :- black_generator(Coord).
 invalid_position_generator(R/C  ) :- member(R, [0,9]), column(C).
 
 test(invalid_position, [forall(invalid_position_generator(Coord)), setup(start_board(SB))]) :-
-    '_pawn':valid_poition(SB, Coord, []-[], no).
+    '_pawn':valid_position(SB, Coord, []-[], no).
 
 can_strike_invalid_position_generator(R/C) :- member(R, [0,9]), column(C).
 can_strike_invalid_position_generator(R/C) :- member(C, [0,9]), column(R).

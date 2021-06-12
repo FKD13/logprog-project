@@ -22,17 +22,17 @@ get_pawn_moves(Board, m(b, Passant), R/C, Moves) :-
 get_plain_pawn_moves(Board, MetaData, R/C, Forward-T, Valid) :-
     CPlus is C + 1,
     CMin is C - 1,
-    valid_poition(Board, R/C, Forward-Strike1, Valid),
+    valid_position(Board, R/C, Forward-Strike1, Valid),
     can_strike(Board, MetaData, R/CPlus, Strike1-Strike2),
     can_strike(Board, MetaData, R/CMin, Strike2-T).
 
 
-valid_poition(_    , 9/_  , T-T           , no ) :- !.
-valid_poition(_    , 0/_  , T-T           , no ) :- !.
-valid_poition(Board, Coord, T-T           , no ) :- get_piece_at(Board, Coord, p(_, _)), !.
-valid_poition(_    , Coord, [ Coord | T]-T, yes).
+valid_position(_    , 9/_  , T-T           , no ) :- !.
+valid_position(_    , 0/_  , T-T           , no ) :- !.
+valid_position(Board, Coord, T-T           , no ) :- get_piece_at(Board, Coord, p(_, _)), !.
+valid_position(_    , Coord, [ Coord | T]-T, yes).
 
-add_leap(Board, Coord, Moves, yes) :- valid_poition(Board, Coord, Moves, _).
+add_leap(Board, Coord, Moves, yes) :- valid_position(Board, Coord, Moves, _).
 add_leap(_    , _    , T-T  , no ).
 
 can_strike(_    , _          , 9/_  , T-T           ) :- !.
