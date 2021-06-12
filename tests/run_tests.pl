@@ -2,6 +2,7 @@
 
 :- ['moves/_diagonal'].
 :- ['moves/_horizontal'].
+:- ['moves/_pawn'].
 :- ['moves/_surroundings'].
 :- ['moves/_vertical'].
 
