@@ -60,6 +60,11 @@ test(get_piece_at_start_board, [setup(start_board(SB)), set(Piece = [empty])]) :
     member(X, [3, 4, 5, 6]),
     get_piece_at(SB, X/_, Piece).
 
+test(get_piece_at_fail, [setup(start_board(SB)), fail]) :-
+    member(R, [1, 2, 3, 4, 5, 6, 7, 8]),
+    member(C, [1, 2, 3, 4, 5, 6, 7, 8]),
+    get_piece_at(SB, R/C, non_existant).
+
 test(set_piece_at, [setup(empty_board(EB)), set(X = [empty])]) :-
     member(R, [1, 2, 3, 4, 5, 6, 7, 8]),
     member(C, [1, 2, 3, 4, 5, 6, 7, 8]),
@@ -72,10 +77,5 @@ test(set_piece_at_fail, [setup(empty_board(EB)), fail]) :-
     member(C, [1, 2, 3, 4, 5, 6, 7, 8]),
     set_piece_at(EB, R/C, empty, Out),
     get_piece_at(Out, R/C, non_empty).
-
-test(get_piece_at_fail, [setup(start_board(SB)), fail]) :-
-    member(R, [1, 2, 3, 4, 5, 6, 7, 8]),
-    member(C, [1, 2, 3, 4, 5, 6, 7, 8]),
-    get_piece_at(SB, R/C, non_existant).
 
 :- end_tests('utils/board_utils').

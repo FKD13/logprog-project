@@ -22,6 +22,6 @@ get_piece_at(Board, R/C, Piece) :-
 %   @arg Piece The piece to place on the board.
 %   @arg Out The output board.
 set_piece_at(Board, R/C, Piece, Out) :-
-    copy_term(Board, Out),
+    duplicate_term(Board, Out),
     arg(R, Out, Row),
     setarg(C, Row, Piece).
