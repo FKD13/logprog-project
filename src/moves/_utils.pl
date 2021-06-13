@@ -2,11 +2,6 @@
 
 :- use_module('../utils/board_utils').
 
-outside_board(R/_) :- R < 1, !.
-outside_board(R/_) :- R > 8, !.
-outside_board(_/C) :- C < 1, !.
-outside_board(_/C) :- C > 8, !.
-
 test_position(_    , _          , _, Coord, T-T) :- outside_board(Coord), !.
 test_position(Board, p(Color, _), _, Coord, T-T) :- get_piece_at(Board, Coord, p(Color, _)), !.
 test_position(_    , Piece      , O, Coord, [ m(Piece, O, Coord) | T]-T).

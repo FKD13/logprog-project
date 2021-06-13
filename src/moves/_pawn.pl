@@ -27,19 +27,15 @@ get_plain_pawn_moves(Board, Piece, OldCoord, R/C, Forward-T, Passant, Valid) :-
     can_strike(Board, Piece, OldCoord, Passant, R/CMin, Strike2-T).
 
 
-valid_position(_    , _    , _       , 9/_  , T-T, no ) :- !.
-valid_position(_    , _    , _       , 0/_  , T-T, no ) :- !.
+valid_position(_    , _    , _       , Coord, T-T, no ) :- outside_board(Coord), !.
 valid_position(Board, _    , _       , Coord, T-T, no ) :- get_piece_at(Board, Coord, p(_, _)), !.
 valid_position(_    , Piece, OldCoord, Coord, [ m(Piece, OldCoord, Coord) | T]-T, yes).
 
 add_leap(Board, Piece, OldCoord, Coord, Moves, yes) :- valid_position(Board, Piece, OldCoord, Coord, Moves, _).
 add_leap(_    , _    , _       , _    , T-T  , no ).
 
-can_strike(_    , _          , _, _   , 9/_  , T-T) :- !.
-can_strike(_    , _          , _, _   , 0/_  , T-T) :- !.
-can_strike(_    , _          , _, _   , _/0  , T-T) :- !.
-can_strike(_    , _          , _, _   , _/9  , T-T) :- !.
+can_strike(_    , _          , _, _   , Coord, T-T                        ) :- outside_board(Coord), !.
 can_strike(_    , Piece      , O, Pass, Pass , [ m(Piece, O, Pass) | T]-T ) :- !.
-can_strike(Board, _          , _, _   , Coord, T-T                                 ) :- get_piece_at(Board, Coord, empty      ), !.
-can_strike(Board, p(Color, _), _, _   , Coord, T-T                                 ) :- get_piece_at(Board, Coord, p(Color, _)), !.
+can_strike(Board, _          , _, _   , Coord, T-T                        ) :- get_piece_at(Board, Coord, empty      ), !.
+can_strike(Board, p(Color, _), _, _   , Coord, T-T                        ) :- get_piece_at(Board, Coord, p(Color, _)), !.
 can_strike(Board, Piece      , O, _   , Coord, [ m(Piece, O, Coord) | T]-T) :- get_piece_at(Board, Coord, p(_    , _)), !.

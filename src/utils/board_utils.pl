@@ -1,4 +1,4 @@
-:- module(board_utils, [get_piece_at/3, set_piece_at/4]).
+:- module(board_utils, [get_piece_at/3, set_piece_at/4, outside_board/1]).
 
 %!  get_piece_at(+Board, +Coord, -Piece)
 %
@@ -25,3 +25,13 @@ set_piece_at(Board, R/C, Piece, Out) :-
     duplicate_term(Board, Out),
     arg(R, Out, Row),
     setarg(C, Row, Piece).
+
+%!  outside_board(+Coord)
+%
+%   True if the position represented by Coord is on the board.
+%   
+%   @arg Coord The position to check.
+outside_board(R/_) :- R < 1, !.
+outside_board(R/_) :- R > 8, !.
+outside_board(_/C) :- C < 1, !.
+outside_board(_/C) :- C > 8, !.
