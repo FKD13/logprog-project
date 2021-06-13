@@ -1,5 +1,11 @@
 :- module(board_utils, [get_piece_at/3, set_piece_at/4, outside_board/1]).
 
+/** <module> board_utils - Board utilities
+
+This module provides some predicates for working with the chess board.
+
+*/
+
 %!  get_piece_at(+Board, +Coord, -Piece)
 %
 %   Get the piece at a specific position on the board.
@@ -25,6 +31,7 @@ set_piece_at(Board, R/C, Piece, Out) :-
     duplicate_term(Board, Out),
     arg(R, Out, Row),
     setarg(C, Row, Piece).
+
 
 %!  outside_board(+Coord)
 %

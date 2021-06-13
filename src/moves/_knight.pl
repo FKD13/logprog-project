@@ -1,7 +1,19 @@
 :- module('_knight', [get_knight_moves/4]).
 
+/** <module> _knight - Get knight moves.
+*/
+
 :- use_module('../moves/_utils').
 
+
+%!  get_knight_moves(+Board, +Piece, +Coord, -Moves)
+%
+%   Get all possible knight moves from a given position.
+%
+%   @arg Board The board to check available moves on.
+%   @arg Piece The piece at the coordinate location.
+%   @arg Coord The location of the piece.
+%   @arg Moves The possible moves. This is a difference list.
 get_knight_moves(Board, Piece, R/C, L1-T) :-
     RP2 is R + 2, CP2 is C + 2,
     RP1 is R + 1, CP1 is C + 1,
