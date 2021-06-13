@@ -2,25 +2,30 @@
 :- use_module('../../src/moves/_diagonal').
 :- use_module('../test_utils').
 
-test(get_diagonal_moves, [setup(start_board(SB)), true(X = [4/4,5/5,6/6,7/7,4/2,5/1])]) :-
-    get_diagonal_moves(SB, w, 3/3, X-[]).
+test(get_diagonal_moves, [setup(start_board(SB)), true(X = [m(p(w,_),Old,4/4),m(p(w,_),Old,5/5),m(p(w,_),Old,6/6),m(p(w,_),Old,7/7),m(p(w,_),Old,4/2),m(p(w,_),Old,5/1)])]) :-
+    Old = 3/3,
+    get_diagonal_moves(SB, p(w, _), Old, X-[]).
 
-test(get_diagonal_moves, [setup(start_board(SB)), true(X = [3/6,3/8,5/8,5/6,6/5,7/4])]) :-
-    get_diagonal_moves(SB, w, 4/7, X-[]).
+test(get_diagonal_moves, [setup(start_board(SB)), true(X = [m(p(w,_),Old,3/6),m(p(w,_),Old,3/8),m(p(w,_),Old,5/8),m(p(w,_),Old,5/6),m(p(w,_),Old,6/5),m(p(w,_),Old,7/4)])]) :-
+    Old = 4/7,
+    get_diagonal_moves(SB, p(w, _), Old, X-[]).
 
-test(get_diagonal_moves, [setup(start_board(SB)), true(X = [6/2,5/1,6/4,5/5,4/6,3/7,8/4,8/2])]) :-
-    get_diagonal_moves(SB, w, 7/3, X-[]).
+test(get_diagonal_moves, [setup(start_board(SB)), true(X = [m(p(w,_),Old,6/2),m(p(w,_),Old,5/1),m(p(w,_),Old,6/4),m(p(w,_),Old,5/5),m(p(w,_),Old,4/6),m(p(w,_),Old,3/7),m(p(w,_),Old,8/4),m(p(w,_),Old,8/2)])]) :-
+    Old = 7/3,
+    get_diagonal_moves(SB, p(w, _), Old, X-[]).
 
 test(get_diagonal_moves_corners, [setup(start_board(SB)), true(X = [])]) :-
-    get_diagonal_moves(SB, w, 1/1, X-[]).
+    get_diagonal_moves(SB, p(w, _), 1/1, X-[]).
 
 test(get_diagonal_moves_corners, [setup(start_board(SB)), true(X = [])]) :-
-    get_diagonal_moves(SB, w, 1/8, X-[]).
+    get_diagonal_moves(SB, p(w, _), 1/8, X-[]).
 
-test(get_diagonal_moves_corners, [setup(start_board(SB)), true(X = [7/7])]) :-
-    get_diagonal_moves(SB, w, 8/8, X-[]).
+test(get_diagonal_moves_corners, [setup(start_board(SB)), true(X = [m(p(w,_),Old,7/7)])]) :-
+    Old = 8/8,
+    get_diagonal_moves(SB, p(w, _), Old, X-[]).
 
-test(get_diagonal_moves_corners, [setup(start_board(SB)), true(X = [7/2])]) :-
-    get_diagonal_moves(SB, w, 8/1, X-[]).
+test(get_diagonal_moves_corners, [setup(start_board(SB)), true(X = [m(p(w,_),Old,7/2)])]) :-
+    Old = 8/1,
+    get_diagonal_moves(SB, p(w, _), Old, X-[]).
 
 :- end_tests('moves/_diagonal').
