@@ -33,11 +33,19 @@ test(cant_strike_own_color_white, [forall(white_generator(Coord)), setup(start_b
 test(cant_strike_own_color_black, [forall(black_generator(Coord)), setup(start_board(SB))]) :-
     '_pawn':can_strike(SB, p(b, pawn), _, no, Coord, []-[]).
 
-test(can_strike_other_color_white, [forall(black_generator(Coord)), setup(start_board(SB)), true(X = [m(Piece, Old, Coord)])]) :-
+test(can_strike_other_color_white, [forall((black_generator(Coord), Coord = R/_, R \== 1, R \== 8)), setup(start_board(SB)), true(X = [m(Piece, Old, Coord)])]) :-
     Piece = p(w, pawn),
     '_pawn':can_strike(SB, Piece, Old, no, Coord, X-[]).
 
-test(can_strike_other_color_black, [forall(white_generator(Coord)), setup(start_board(SB)), true(X = [m(Piece, Old, Coord)])]) :-
+test(can_strike_other_color_white_with_promotion, [forall((black_generator(Coord), Coord = R/_, (R == 1; R == 8))), setup(start_board(SB)), true(X = [m(p(w,queen),Old,Coord),m(p(w,knight),Old,Coord),m(p(w,bishop),Old,Coord),m(p(w,rook),Old,Coord)])]) :-
+    Piece = p(w, pawn),
+    '_pawn':can_strike(SB, Piece, Old, no, Coord, X-[]).
+
+test(can_strike_other_color_black, [forall((white_generator(Coord), Coord = R/_, R \== 1, R \== 8)), setup(start_board(SB)), true(X = [m(Piece, Old, Coord)])]) :-
+    Piece = p(b, pawn),
+    '_pawn':can_strike(SB, Piece, Old, no, Coord, X-[]).
+
+test(can_strike_other_color_black_with_promotion, [forall((white_generator(Coord), Coord = R/_, (R == 1; R == 8))), setup(start_board(SB)), true(X = [m(p(b,queen),Old,Coord),m(p(b,knight),Old,Coord),m(p(b,bishop),Old,Coord),m(p(b,rook),Old,Coord)])]) :-
     Piece = p(b, pawn),
     '_pawn':can_strike(SB, Piece, Old, no, Coord, X-[]).
 
