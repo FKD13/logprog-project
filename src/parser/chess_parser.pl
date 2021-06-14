@@ -10,14 +10,14 @@
 
 %! parse_board(-Board, -Meta, -Meta, -List, +Rest) is det
 parse_board(b(R1, R2, R3, R4, R5, R6, R7, R8), MetaWhite, MetaBlack) --> 
-    parse_column(8, R8), parse_metadata(MetaBlack), parse_newline,
+    parse_column(8, R8), parse_metadata(MetaBlack, b), parse_newline,
     parse_column(7, R7), parse_newline,
     parse_column(6, R6), parse_newline,
     parse_column(5, R5), parse_newline,
     parse_column(4, R4), parse_newline,
     parse_column(3, R3), parse_newline,
     parse_column(2, R2), parse_newline,
-    parse_column(1, R1), parse_metadata(MetaWhite), parse_newline,
+    parse_column(1, R1), parse_metadata(MetaWhite, w), parse_newline,
     parse_last_line.
 
 %!
@@ -35,10 +35,10 @@ parse_eigth_pieces(r(P1, P2, P3, P4, P5, P6, P7, P8)) -->
     parse_optional_piece(P7), 
     parse_optional_piece(P8).
 
-parse_metadata(m(Queen, King, Turn, Coord)) --> 
+parse_metadata(m(Queen, King, Turn, Coord), Color) --> 
     " [", 
-    parse_optional_rocade(_, queen, Queen),
-    parse_optional_rocade(_, king, King),
+    parse_optional_rocade(Color, queen, Queen),
+    parse_optional_rocade(Color, king, King),
     parse_optional_en_passant(Coord),
     "]", !,
     parse_optional_turn_indicator(Turn). 
