@@ -11,6 +11,8 @@
 :- ['parser/_pieces'].
 :- ['parser/chess_parser'].
 
+:- ['search/_score'].
+
 :- ['utils/board_utils'].
 
 run :-
