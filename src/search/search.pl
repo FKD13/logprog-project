@@ -1,8 +1,10 @@
 :- module('search', [best/3, move/7]).
 
+:- use_module('../moves/check').
 :- use_module('../moves/moves').
 :- use_module('_score').
 :- use_module('../utils/board_utils').
+:- use_module('../utils/color').
 :- use_module('../utils/lists_extension').
 
 best(Board, Color, Best) :-
@@ -21,19 +23,19 @@ min_max(Depth, Board, Color, s(Best, BestScore)) :-
         maplist(
             [Move, s(Move, Score)]>>(
                 make_move(Board, Move, NewBoard),
-                next_color(Color, NColor), 
-                min_max(NDepth, NewBoard, NColor, s(_, NegScore)),
-                Score is -NegScore
+                (check(NewBoard, Color) -> 
+                    Score = -1000
+                ;
+                    next_color(Color, NColor),
+                    min_max(NDepth, NewBoard, NColor, s(_, NegScore)),
+                    Score is -NegScore
+                )
             ),
             Moves,
             ScoredMoves
         ),
         'lists_extension':max_member([s(_, S1), s(_, S2)]>>(S1 =< S2), s(Best, BestScore), ScoredMoves)
     ).
-
-
-next_color(w, b).
-next_color(b, w).
 
 move(Board, M1, M2, Move, NB, m(W1, W2, W3, W4), m(B1, B2, B3, B4)) :- 
     search:make_move(Board, Move, NB),
