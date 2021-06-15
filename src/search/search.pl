@@ -35,19 +35,21 @@ min_max(Depth, Board, Color, s(Best, BestScore)) :-
 next_color(w, b).
 next_color(b, w).
 
-move(Board, M1, M2, Move, NB, NM1, NM2) :- 
+move(Board, M1, M2, Move, NB, m(W1, W2, W3, W4), m(B1, B2, B3, B4)) :- 
     search:make_move(Board, Move, NB),
-    next_turn(M1, TmpM1),
-    next_turn(M2, TmpM2),
-    rokade(NB, w, TmpM1, NM1),
-    rokade(NB, b, TmpM2, NM2).
+    rokade(NB, w,       M1, m(W1, W2, _ , _ )),
+    rokade(NB, b,       M2, m(B1, B2, _ , _ )),
+    next_turn(          M1, m(_ , _ , W3, _ )),
+    next_turn(          M2, m(_ , _ , B3, _ )),
+    en_passant(w, Move, M1, m(_ , _ , _ , W4)),
+    en_passant(b, Move, M2, m(_ , _ , _ , B4)).
 
 make_move(Board, m(Piece, OldCoord, Coord), NewBoard) :-
     set_piece_at(Board, OldCoord, empty, Tmp     ),
     set_piece_at(Tmp  , Coord   , Piece, NewBoard).
 
-next_turn(m(A, B, yes, _), m(A, B, no, no)).
-next_turn(m(A, B, no, _), m(A, B, yes, no)).
+next_turn(m(A, B, yes, D), m(A, B, no , D)).
+next_turn(m(A, B, no , D), m(A, B, yes, D)).
 
 rokade(_    , _, m(no , no , C, D), m(no , no , C, D)) :- !.
 rokade(Board, w, m(yes, no , C, D), m(yes, no , C, D)) :- get_piece_at(Board, 1/1 , p(w, rook)), get_piece_at(Board, 1/5 , p(w, king)), !.
@@ -62,3 +64,7 @@ rokade(_    , b, m(no , yes, C, D), m(no , no , C, D)) :- !.
 rokade(Board, Color, m(yes, yes, C, D), m(A, B, C, D)) :-
     rokade(Board, Color, m(yes, no, C, D), m(A, no, C, D)),
     rokade(Board, Color, m(no, yes, C, D), m(no, B, C, D)).
+
+en_passant(w, m(p(w, pawn), 2/C, 4/C), m(A, B, C_, _), m(A, B, C_, 3/C)) :- !.
+en_passant(b, m(p(b, pawn), 7/C, 5/C), m(A, B, C_, _), m(A, B, C_, 6/C)) :- !.
+en_passant(_, _                      , m(A, B, C_, _), m(A, B, C_, no) ).
