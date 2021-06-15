@@ -1,5 +1,6 @@
 :- module('run_docs', []).
 
+:- use_module('moves/moves').
 :- use_module('parser/chess_parser').
 :- use_module('main').
 :- use_module('utils/board_utils.pl').
