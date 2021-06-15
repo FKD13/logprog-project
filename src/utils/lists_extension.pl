@@ -25,3 +25,10 @@ max_member_([H|T], Pred, Max0, Max) :-
     ->  max_member_(T, Pred, Max0, Max)
     ;   max_member_(T, Pred, H, Max)
     ).
+
+filter(_, [], []).
+filter(Pred, [X|Xs], [X|Ys]) :-
+    call(Pred, X),
+    filter(Pred, Xs, Ys).
+filter(Pred, [_|Xs], Ys) :-
+    filter(Pred, Xs, Ys).
