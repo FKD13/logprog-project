@@ -1,41 +1,42 @@
 :- module('search', [best/3, move/7]).
 
-:- use_module('../moves/check').
 :- use_module('../moves/moves').
+:- use_module('../moves/state').
 :- use_module('_score').
 :- use_module('../utils/board_utils').
 :- use_module('../utils/color').
 :- use_module('../utils/lists_extension').
 
 best(Board, Color, Best) :-
-    min_max(3, Board, Color, s(Best, _)).
+    get_moves(Board, Color, Moves-[]),
+    min_max(3, Board, Color, s(Best, _), Moves).
 
-min_max(0, Board, Color, s(_, Score)) :-
+min_max(0, Board, Color, s(_, Score), _) :-
     get_score(Board, Color, Score), !.
 
-min_max(Depth, Board, Color, s(Best, BestScore)) :-
+min_max(Depth, Board, Color, s(Best, BestScore), Moves) :-
     NDepth is Depth - 1,
-    get_moves(Board, Color, Moves-[]),
-    (Moves = [] -> % This color is out of moves -> win for other color.
-        Best = _,
-        BestScore = -10000
-    ;
-        maplist(
-            [Move, s(Move, Score)]>>(
-                make_move(Board, Move, NewBoard),
-                (check(NewBoard, Color) -> 
-                    Score = -10000
+    maplist(
+        [Move, s(Move, Score)]>>(
+            make_move(Board, Move, NewBoard),
+            next_color(Color, NColor),
+            get_moves(NewBoard, NColor, NextMoves-[]),
+            state(NewBoard, Color, NextMoves, State),
+            (State = check -> 
+                Score = -10000
+            ;
+                (State = stalemate ->
+                    Score = 0
                 ;
-                    next_color(Color, NColor),
-                    min_max(NDepth, NewBoard, NColor, s(_, NegScore)),
+                    min_max(NDepth, NewBoard, NColor, s(_, NegScore), NextMoves),
                     Score is -NegScore
                 )
-            ),
-            Moves,
-            ScoredMoves
+            )
         ),
-        'lists_extension':max_member([s(_, S1), s(_, S2)]>>(S1 =< S2), s(Best, BestScore), ScoredMoves)
-    ).
+        Moves,
+        ScoredMoves
+    ),
+    'lists_extension':max_member([s(_, S1), s(_, S2)]>>(S1 =< S2), s(Best, BestScore), ScoredMoves).
 
 move(Board, M1, M2, Move, NB, m(W1, W2, W3, W4), m(B1, B2, B3, B4)) :- 
     search:make_move(Board, Move, NB),
