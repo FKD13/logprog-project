@@ -18,13 +18,13 @@ min_max(Depth, Board, Color, s(Best, BestScore)) :-
     get_moves(Board, Color, Moves-[]),
     (Moves = [] -> % This color is out of moves -> win for other color.
         Best = _,
-        BestScore = -1000
+        BestScore = -10000
     ;
         maplist(
             [Move, s(Move, Score)]>>(
                 make_move(Board, Move, NewBoard),
                 (check(NewBoard, Color) -> 
-                    Score = -1000
+                    Score = -10000
                 ;
                     next_color(Color, NColor),
                     min_max(NDepth, NewBoard, NColor, s(_, NegScore)),

@@ -15,9 +15,9 @@ get_score_piece(_    , p(_    , Type), NegScore) :- score_piece(Type, Score), Ne
 
 
 %!  score_piece(Piece, Score).
-score_piece(pawn  , 1).
-score_piece(rook  , 3).
-score_piece(knight, 3).
-score_piece(bishop, 3).
-score_piece(queen , 10).
-score_piece(king  , 100).
+score_piece(pawn  , 100).
+score_piece(rook  , 500).
+score_piece(knight, 310).
+score_piece(bishop, 320).
+score_piece(queen , 900).
+score_piece(king  , 1000).
