@@ -16,7 +16,7 @@ The main module defines rules used to start the chess program.
 %! main
 % 
 % The main rule, this starts the program.
-main([]) :- 
+main([]) :- !,
     read_string(user_input, _, Str),
     string_codes(Str, Codes),
     parse_board(Board, M1, M2, Codes, []),
@@ -27,7 +27,7 @@ main([]) :-
     string_codes(Out, NCodes),
     write(Out), nl,
     halt(0).
-main(['TEST']) :-
+main(['TEST']) :- !,
     read_string(user_input, _, Str),
     string_codes(Str, Codes),
     parse_board(Board, M1, M2, Codes, []),
@@ -35,7 +35,7 @@ main(['TEST']) :-
     get_moves(Board, Color, Moves-[]),
     write_test_results(Board, M1, M2, Moves),
     halt(0).
-main(_) :-
+main(_) :- !,
     nl, write("Invalid Aguments"), nl, halt(1).
 
 write_test_results(_    , _ , _ , []).
