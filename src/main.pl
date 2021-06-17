@@ -47,7 +47,7 @@ main(_) :- !, nl, write("Invalid Aguments"), nl, halt(1).
 %!  write_test_results(+Board, +MetaDataWhite, +MetaDataBlack, +Moves)
 %
 %   Given a Board and it's metadata, for each move:
-%   - Check id the move is valid.
+%   - Check id the move is valid. % TODO TEST THIS.
 %   - Apply to the Board.
 %   - Print the Board to stdout.
 %   This while separating all boards by a 
