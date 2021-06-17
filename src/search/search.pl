@@ -8,8 +8,11 @@
 :- use_module('../utils/lists_extension').
 
 best(Board, Color, Best) :-
-    get_moves(Board, Color, Moves-[]),
-    min_max(3, Board, Color, s(Best, _), Moves).
+    get_moves(Board, Color, TmpMoves-[]),
+    random_permutation(TmpMoves, Moves),
+    % write(Moves),
+    %min_max(3, Board, Color, s(Best, _), Moves).
+    ab_prune(3, Board, Color, Color, b(-10001, 10001), _, s(Best, _), Moves).
 
 min_max(0, Board, Color, s(_, Score), _) :-
     get_score(Board, Color, Score), !.
@@ -37,6 +40,61 @@ min_max(Depth, Board, Color, s(Best, BestScore), Moves) :-
         ScoredMoves
     ),
     'lists_extension':max_member([s(_, S1), s(_, S2)]>>(S1 =< S2), s(Best, BestScore), ScoredMoves).
+
+ab_prune(0, Board, MaxColor, _, _, _, s(_, Score), _) :- get_score(Board, MaxColor, Score), !.
+ab_prune(_    , _    , Color   , Color, b(Min, _  ), Best       , s(Best, Min)      , []) :- !.
+ab_prune(_    , _    , MaxColor, Color, b(_  , Max), Best       , s(Best, Max)      , []) :- MaxColor \== Color, !.
+ab_prune(Depth, Board, MaxColor, Color, b(Min, Max), CurrentBest, s(Best, BestScore), [Move | Moves]) :-
+    NextDepth is Depth - 1,
+    make_move(Board, Move, NextBoard),
+    next_color(Color, NextColor),
+    get_moves(NextBoard, NextColor, NextMoves-[]),
+    state(NextBoard, Color, NextMoves, State),
+    
+    (State = check -> 
+        (MaxColor = Color ->
+            Score = -10000
+            ;
+            Score = 10000
+        )
+        ;
+        (State = stalemate ->
+            (MaxColor = Color ->
+                Score = -10000
+                ;
+                Score = -10000
+            )
+            ;
+            ab_prune(NextDepth, NextBoard, MaxColor, NextColor, b(Min, Max), _, s(_, Score), NextMoves)
+        )
+    ),
+    
+    (MaxColor = Color ->
+        (Score >= Max -> 
+            Best = Move,
+            BestScore = Score
+            ;
+            (Score >= Min -> 
+                ab_prune(Depth, Board, MaxColor, Color, b(Score, Max), Move       , s(Best, BestScore), Moves)
+                ;
+                ab_prune(Depth, Board, MaxColor, Color, b(Min, Max)  , CurrentBest, s(Best, BestScore), Moves)
+            )
+        )
+        ;
+        (Score =< Min ->
+            Best = Move,
+            BestScore = Score
+            ;
+            (Score =< Max ->
+                ab_prune(Depth, Board, MaxColor, Color, b(Min, Score), Move       , s(Best, BestScore), Moves)
+                ;
+                ab_prune(Depth, Board, MaxColor, Color, b(Min, Max)  , CurrentBest, s(Best, BestScore), Moves)
+            )
+        )
+
+    ).
+    
+
 
 move(Board, M1, M2, Move, NB, m(W1, W2, W3, W4), m(B1, B2, B3, B4)) :- 
     search:make_move(Board, Move, NB),
