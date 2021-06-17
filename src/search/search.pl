@@ -1,7 +1,7 @@
 :- module('search', [best/3, move/7]).
 
+:- use_module('../moves/check').
 :- use_module('../moves/moves').
-:- use_module('../moves/state').
 :- use_module('_score').
 :- use_module('../utils/board_utils').
 :- use_module('../utils/color').

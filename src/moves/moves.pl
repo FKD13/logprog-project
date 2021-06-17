@@ -1,4 +1,4 @@
-:- module('moves', [get_moves/3]).
+:- module('moves', [get_moves/5]).
 
 :- use_module('_diagonal').
 :- use_module('_horizontal').
@@ -9,7 +9,7 @@
 
 :- use_module('../utils/board_utils').
 
-get_moves(Board, Color, AllMoves) :-
+get_moves(Board, MetaWhite, MetaBlack, Color, AllMoves) :-
     findall(Moves,(
         get_piece_at(Board, Coord, p(Color, T)),
         get_moves_piece(Board, p(Color, T), Coord, Moves)
