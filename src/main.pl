@@ -40,7 +40,7 @@ main(['TEST']) :- !,
     string_codes(Str, Codes),
     parse_board(Board, M1, M2, Codes, []),
     color(M1, M2, Color),
-    get_moves(Board, M1, M2, Color, Moves-T),
+    get_moves(Board, M1, M2, Color, Moves-[]),
     write_test_results(Board, M1, M2, Moves),
     halt(0).
 main(_) :- !, nl, write("Invalid Aguments"), nl, halt(1).
