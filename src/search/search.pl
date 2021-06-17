@@ -10,38 +10,10 @@
 best(Board, Color, Best) :-
     get_moves(Board, Color, TmpMoves-[]),
     random_permutation(TmpMoves, Moves),
-    % write(Moves),
-    %min_max(3, Board, Color, s(Best, _), Moves).
-    ab_prune(3, Board, Color, Color, b(-10001, 10001), _, s(Best, _), Moves).
+    ab_prune(4, Board, Color, Color, b(-10001, 10001), _, s(Best, _), Moves). %, write(Score), nl.
 
-min_max(0, Board, Color, s(_, Score), _) :-
-    get_score(Board, Color, Score), !.
 
-min_max(Depth, Board, Color, s(Best, BestScore), Moves) :-
-    NDepth is Depth - 1,
-    maplist(
-        [Move, s(Move, Score)]>>(
-            make_move(Board, Move, NewBoard),
-            next_color(Color, NColor),
-            get_moves(NewBoard, NColor, NextMoves-[]),
-            state(NewBoard, Color, NextMoves, State),
-            (State = check -> 
-                Score = -10000
-            ;
-                (State = stalemate ->
-                    Score = 0
-                ;
-                    min_max(NDepth, NewBoard, NColor, s(_, NegScore), NextMoves),
-                    Score is -NegScore
-                )
-            )
-        ),
-        Moves,
-        ScoredMoves
-    ),
-    'lists_extension':max_member([s(_, S1), s(_, S2)]>>(S1 =< S2), s(Best, BestScore), ScoredMoves).
-
-ab_prune(0, Board, MaxColor, _, _, _, s(_, Score), _) :- get_score(Board, MaxColor, Score), !.
+ab_prune(0, Board, MaxColor, _, _, _, s(end, Score), _) :- get_score(Board, MaxColor, Score), !.
 ab_prune(_    , _    , Color   , Color, b(Min, _  ), Best       , s(Best, Min)      , []) :- !.
 ab_prune(_    , _    , MaxColor, Color, b(_  , Max), Best       , s(Best, Max)      , []) :- MaxColor \== Color, !.
 ab_prune(Depth, Board, MaxColor, Color, b(Min, Max), CurrentBest, s(Best, BestScore), [Move | Moves]) :-
@@ -49,55 +21,73 @@ ab_prune(Depth, Board, MaxColor, Color, b(Min, Max), CurrentBest, s(Best, BestSc
     make_move(Board, Move, NextBoard),
     next_color(Color, NextColor),
     get_moves(NextBoard, NextColor, NextMoves-[]),
-    state(NextBoard, Color, NextMoves, State),
     
-    (State = check -> 
+    (check(NextBoard, Color, NextMoves) ->
+        % CHECK
+        % If we would make Move, we would place ourselves in a check position. Don't and continue with next move from Moves.
+        ab_prune(Depth, Board, MaxColor, Color, b(Min, Max)  , CurrentBest, s(Best, BestScore), Moves)
+        ;
+        (NextMoves = [] -> 
+            % STALEMATE
+            % No further moves are possible by the enemy player, reached a stalemate.
+            Score = 0
+            ;
+            % CALCULATE SCORE
+            ab_prune(NextDepth, NextBoard, MaxColor, NextColor, b(Min, Max), none, s(TmpBest, TmpScore), NextMoves),
+            (TmpBest = none ->
+                % CHECKMATE
+                % Every move in NextMoves leads to a CHECK for the other player. 
+                (Color = MaxColor ->
+                    % Enemy has checkmate.
+                    Score = 1000
+                    ;
+                    % We are checkmate.
+                    Score = -1000
+                )
+                ;
+                % Use computed score.
+                Score = TmpScore
+            )
+        ),
         (MaxColor = Color ->
-            Score = -10000
-            ;
-            Score = 10000
-        )
-        ;
-        (State = stalemate ->
-            (MaxColor = Color ->
-                Score = -10000
+            % Our turn, Maximizing score.
+            (Score >= Max -> 
+                Best = Move,
+                BestScore = Score
                 ;
-                Score = -10000
+                (Score > Min -> 
+                    ab_prune(Depth, Board, MaxColor, Color, b(Score, Max), Move       , s(Best, BestScore), Moves)
+                    ;
+                    (CurrentBest = none -> 
+                        ab_prune(Depth, Board, MaxColor, Color, b(Min, Max)  , not_this_one, s(Best, BestScore), Moves)
+                        ;
+                        ab_prune(Depth, Board, MaxColor, Color, b(Min, Max)  , CurrentBest, s(Best, BestScore), Moves)
+                    )
+                )
             )
             ;
-            ab_prune(NextDepth, NextBoard, MaxColor, NextColor, b(Min, Max), _, s(_, Score), NextMoves)
-        )
-    ),
-    
-    (MaxColor = Color ->
-        (Score >= Max -> 
-            Best = Move,
-            BestScore = Score
-            ;
-            (Score >= Min -> 
-                ab_prune(Depth, Board, MaxColor, Color, b(Score, Max), Move       , s(Best, BestScore), Moves)
+            % Other turn, Minimizing score.
+            (Score =< Min ->
+                Best = Move,
+                BestScore = Score
                 ;
-                ab_prune(Depth, Board, MaxColor, Color, b(Min, Max)  , CurrentBest, s(Best, BestScore), Moves)
+                (Score < Max ->
+                    ab_prune(Depth, Board, MaxColor, Color, b(Min, Score), Move       , s(Best, BestScore), Moves)
+                    ;
+                    (CurrentBest = none -> 
+                        ab_prune(Depth, Board, MaxColor, Color, b(Min, Max)  , not_this_one, s(Best, BestScore), Moves)
+                        ;
+                        ab_prune(Depth, Board, MaxColor, Color, b(Min, Max)  , CurrentBest, s(Best, BestScore), Moves)
+                    )
+                )
             )
         )
-        ;
-        (Score =< Min ->
-            Best = Move,
-            BestScore = Score
-            ;
-            (Score =< Max ->
-                ab_prune(Depth, Board, MaxColor, Color, b(Min, Score), Move       , s(Best, BestScore), Moves)
-                ;
-                ab_prune(Depth, Board, MaxColor, Color, b(Min, Max)  , CurrentBest, s(Best, BestScore), Moves)
-            )
-        )
-
     ).
     
 
 
 move(Board, M1, M2, Move, NB, m(W1, W2, W3, W4), m(B1, B2, B3, B4)) :- 
-    search:make_move(Board, Move, NB),
+    make_move(Board, Move, NB),
     rokade(NB, w,       M1, m(W1, W2, _ , _ )),
     rokade(NB, b,       M2, m(B1, B2, _ , _ )),
     next_turn(          M1, m(_ , _ , W3, _ )),
