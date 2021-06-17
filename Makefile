@@ -4,4 +4,4 @@ test:
 	@$(PROLOG_PROGRAM) tests/run_tests.pl
 
 docs:
-	@$(PROLOG_PROGRAM) src/run_docs.pl
+	@$(PROLOG_PROGRAM) src/docs.pl
