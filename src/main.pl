@@ -1,5 +1,7 @@
 :- module(main, [main/1]).
 
+:- set_prolog_flag(stack_limit, 2_147_483_648).
+
 :- initialization(main, main).
 
 :- use_module('moves/moves').
@@ -27,7 +29,7 @@ main([]) :- !,
     string_codes(Str, Codes),
     parse_board(Board, M1, M2, Codes, []),
     color(M1, M2, Color),
-    best(Board, Color, Best),
+    best(Board, M1, M2, Color, Best),
     move(Board, M1, M2, Best, NB, NM1, NM2),
     parse_board(NB, NM1, NM2, NCodes, []),
     string_codes(Out, NCodes),
@@ -38,7 +40,7 @@ main(['TEST']) :- !,
     string_codes(Str, Codes),
     parse_board(Board, M1, M2, Codes, []),
     color(M1, M2, Color),
-    get_moves(Board, Color, Moves-[]),
+    get_moves(Board, M1, M2, Color, Moves-T),
     write_test_results(Board, M1, M2, Moves),
     halt(0).
 main(_) :- !, nl, write("Invalid Aguments"), nl, halt(1).
