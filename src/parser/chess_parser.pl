@@ -48,7 +48,7 @@ parse_column(N, Row) --> parse_digit(N), " ", parse_eigth_pieces(Row).
 
 %!  parse_eigth_pieces(-Row, +List, +End)
 %
-% Parse 8 pieces
+%   Parse 8 pieces
 parse_eigth_pieces(r(P1, P2, P3, P4, P5, P6, P7, P8)) --> 
     parse_optional_piece(P1),
     parse_optional_piece(P2),
@@ -77,11 +77,13 @@ parse_metadata(m(Queen, King, Turn, Coord), Color) -->
 parse_optional_rocade(_, _, no)          --> parse_optional_piece(empty).
 parse_optional_rocade(Color, Piece, yes) --> parse_optional_piece(p(Color, Piece)), {member(Piece, [queen, king])}.
 
+
 %!  parse_optional_en_passant(-Coord, +List, +End)
 %
 %   Parse the optional coordinate of an en pasant posibility.
 parse_optional_en_passant(no) --> "".
 parse_optional_en_passant(R/C) --> parse_column_id(C), parse_digit(R).
+
 
 %!  parse_optional_turn_indicator(-Present, +List, +End)
 %
@@ -89,8 +91,20 @@ parse_optional_en_passant(R/C) --> parse_column_id(C), parse_digit(R).
 parse_optional_turn_indicator(yes) --> "\u261A", !.
 parse_optional_turn_indicator(no) --> [].
 
+
+%!  parse_last_line(+List, +End)
+%
+%   Parse the last line containing the column letters.
 parse_last_line --> "  abcdefgh", parse_optional_newline.
 
+
+%!  parse_newline(+List, +End)
+%
+%   Parse a newline.
 parse_newline --> "\n".
 
+
+%!  parse_optional_newline(+List, +End)
+%
+%   Parse nothing or a newline.
 parse_optional_newline --> "" | parse_newline.
