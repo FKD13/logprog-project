@@ -1,5 +1,8 @@
 :- module('_digits', [parse_digit/3]).
 
+%!  parse_digit(-Id, +List, +End)
+%
+%   Parse a digit.
 parse_digit(1) --> "1".
 parse_digit(2) --> "2".
 parse_digit(3) --> "3".

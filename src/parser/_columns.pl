@@ -1,5 +1,8 @@
 :- module('_columns', [parse_column_id/3]).
 
+%!  parse_column_id(-Id, +List, +End)
+%
+%   Parse a column letter to number.
 parse_column_id(1) --> "a".
 parse_column_id(2) --> "b".
 parse_column_id(3) --> "c".
